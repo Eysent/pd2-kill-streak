@@ -1,0 +1,18 @@
+{
+	"KillStreak_options_title" : "连杀图标&语音选项",
+	"KillStreak_options_desc" : "设定参数",
+	"KillStreak_fadetime_title" : "连杀持续时间",
+	"KillStreak_pos_title" : "连杀图标y轴偏移",
+	"KillStreak_scale_title" : "连杀图标缩放因子",
+	"KillStreak_alpha_title" : "图标透明度",
+	"KillStreak_volume_title" : "连杀音效音量",
+	"KillStreak_enable_sound_title" : "是否开启连杀语音",
+	"KillStreak_voice_source_title" : "连杀语音来源",
+	"voice_source_women1" : "猎狐者",
+	"voice_source_women2" : "零",
+	"voice_source_women3" : "瞳",
+	"voice_source_women4" : "毛妹",
+	"voice_source_women5" : "夏日之兰",
+	"voice_source_men1" : "奥摩",
+	"voice_source_men2" : "飞虎队"
+}

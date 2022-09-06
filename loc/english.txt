@@ -1,0 +1,18 @@
+{
+	"KillStreak_options_title" : "KillStreak options",
+	"KillStreak_options_desc" : "Here you can set the parameters",
+	"KillStreak_fadetime_title" : "Kill streak fade time",
+	"KillStreak_pos_title" : "KillStreak icon y position offset",
+	"KillStreak_scale_title" : "KillStreak icon scale",
+	"KillStreak_alpha_title" : "KillStreak icon alpha value",
+	"KillStreak_volume_title" : "KillStreak kill voice volume",
+	"KillStreak_enable_sound_title" : "KillStreak will play kill streak voice",
+	"KillStreak_voice_source_title" : "kill streak voice source",
+	"voice_source_women1" : "women1",
+	"voice_source_women2" : "women2",
+	"voice_source_women3" : "women3",
+	"voice_source_women4" : "women4",
+	"voice_source_women5" : "women5",
+	"voice_source_men1" : "men1",
+	"voice_source_men2" : "men2"
+}

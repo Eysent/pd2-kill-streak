@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<assets base_path="assets/" load="startup">
+	<group name="guis/textures/killstreak/" path="assets/">
+		<group :name="killicons/" :path="killicons/">
+			<file :name="streak.texture" :path="streak.texture"/>
+		</group>
+	</group>
+</assets>

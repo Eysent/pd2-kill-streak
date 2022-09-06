@@ -1,0 +1,11 @@
+{
+    "name" : "KillStreak",
+    "author" : "Eysent",
+	"blt_version" : 2.3,
+	"hooks" : [
+		{"hook_id" : "lib/managers/menumanager", "script_path" : "Menu.lua"},
+		{"hook_id" : "lib/managers/playermanager", "script_path" : "PlayerManager.lua"}
+		{"hook_id" : "lib/managers/hudmanager", "script_path" : "PlayerManager.lua"}
+		{"hook_id" : "lib/states/ingameplayerbase", "script_path" : "PlayerManager.lua"}
+	]
+}
