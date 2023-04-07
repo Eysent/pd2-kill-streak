@@ -5,7 +5,6 @@ function KillStreakPanel:init(hud)
 	self.kills = 0
 	self._headshot = false
 	self._ogg_table = {
-		--[0] = "Knifekill.ogg"
 		[1] = "Headshot.ogg",
 		[2] = "MultiKill_2.ogg",
 		[3] = "MultiKill_3.ogg",
@@ -20,7 +19,7 @@ function KillStreakPanel:init(hud)
 	}
 	-- index 2 is multikill sound source, that is to say 3-8 index values are invalid
 	self._sound_sources = {}
-
+	
     self._kill_panel = self._full_hud:panel({
         name = "kill_panel", 
         alpha = 0,
@@ -34,17 +33,17 @@ function KillStreakPanel:init(hud)
 		texture = "guis/textures/killstreak/killicons/streak",
 		texture_rect = {0,0,450,450},
 		blend_mode 		= "normal",
-		alpha = KillStreak.Opt.alpha,
+		alpha = KillStreak.Opt.alpha,   -- 自定义参数
 		w = 450 * KillStreak.Opt.scale,
 		h = 450 * KillStreak.Opt.scale,
 		layer = 4
 	})
-	self:set_kill_icon()
+	self:Set_kill_icon()
     self:MakeFine()
     
 end
 
-function KillStreakPanel:set_kill_icon()
+function KillStreakPanel:Set_kill_icon()
 	local index = self.kills
 	if self.kills == 1 and self._headshot then 
 		
@@ -61,11 +60,7 @@ function KillStreakPanel:set_kill_icon()
 	local x = 0+450*(index-1) 
 
 	self._kill_icon:set_texture_rect(x, 0, 450, 450)
-end
-
-function KillStreakPanel:Update()
-	self._kill_icon:set_size(450 * KillStreak.Opt.scale,450 * KillStreak.Opt.scale)
-    self:MakeFine()
+	
 end
 
 function KillStreakPanel:MakeFine()
@@ -74,85 +69,90 @@ function KillStreakPanel:MakeFine()
     
 
     self._kill_icon:set_center(self._kill_panel:w() / 2, self._kill_panel:h() / 2)
-    self._kill_panel:set_center(self._full_hud:center_x(), self._full_hud:center_y() + KillStreak.Opt.pos )    
+    self._kill_panel:set_center(self._full_hud:center_x(), self._full_hud:center_y() + KillStreak.Opt.pos)    
 end
 
+
+
 function KillStreakPanel:SetKills()
-	self:set_kill_icon()
+	self:Set_kill_icon()
 	if KillStreak.Opt.enable_sound then
 		self:play_kill_sound()
 	end
+	
 	self._headshot = false
     self:MakeFine()
     
     self._kill_panel:stop()
-    self._kill_panel:animate(callback(self, self, "show_KillStreak"))
+	
+	self._kill_panel:animate(callback(self, self, "Show_brust"))
+    self._kill_panel:animate(callback(self, self, "Show_fading"))
 end
 
-function KillStreakPanel:animate_combo(text)
-    local t = 0
-	local w = text:w()
-    while t < 1 do
-        t = t + coroutine.yield()
-        local n = 1 - math.sin(t * 360)
-		local t_size = math.lerp( w + 12, w+12, n)
-        text:set_size(t_size,t_size)
-        self:MakeFine()
-    end
-    text:set_size(w,w)
-    self:MakeFine()
-end
+function KillStreakPanel:Show_fading(rect)
+	-- fadetime 是开始渐变消失之前的持续时间
+	local fadetime = KillStreak.Opt.fadetime -- 持续时间
+    local wait_t = fadetime
+	
+    local t = 0.5 -- 从完全不透明到完全消失的时间
 
-function KillStreakPanel:show_KillStreak(rect)
-	-- KillStreak.Opt.fadetime is the time before fading 
-    local anim_t = KillStreak.Opt.fadetime
-    if KillStreak.Opt.fadetime > 4 then
-        anim_t = 3
-    end
-    local t = KillStreak.Opt.fadetime - anim_t 
-    if self._started then
-        self._kill_panel:animate(callback(self, self, "animate_combo"))
-    end
-    self._started = true
-	-- show up animation
+	-- 展示图层
 	self._kill_panel:set_alpha(1)
-    while anim_t > 0 do
-        anim_t = anim_t - coroutine.yield()
+	-- 等待anim_t秒
+	
+    while wait_t > 0 do
+        wait_t = wait_t - coroutine.yield()
     end
-    if KillStreak.Opt.fadetime > 4 then
-        while t > 0 do
-        t = t - coroutine.yield()
-        end
-    end
+
 	-- fade animation
-    while t < 0.5 do
-        t = t + coroutine.yield()
-        local n = 1 - math.sin((t / 2) * 350)       
+    while t > 0 do
+        t = t - coroutine.yield()
+        local n = math.sin((t / 2) * 350)       
         self._kill_panel:set_alpha(math.lerp(0, 1, n))
     end
 	
-    self._started = false
     self.kills = 0
     self._kill_panel:set_alpha(0)
     self._kill_panel:set_x(self._full_hud:center_x())
 end
 
+function KillStreakPanel:Show_brust(panel)
+    local t = 0
+	local w = self._kill_icon:w()
+
+    while t < 0.1 do
+        t = t + coroutine.yield()
+		local n = math.sin((t / 2) * 350)  
+		local t_size = math.lerp( w, 2*w, n)
+		
+		-- 放大icon并居中，不然会以左上角为原点放大
+        self._kill_icon:set_size(t_size,t_size)
+		self._kill_icon:set_center(self._kill_panel:w() / 2, self._kill_panel:h() / 2)
+		
+		self._kill_panel:set_alpha(math.lerp(0, 1, n))
+    end
+	
+	self._kill_panel:set_alpha(1)-- 保证完全显示
+    self:Reset_icon() -- 回复原来大小并居中
+end
+
+function KillStreakPanel:Reset_icon()
+	self._kill_icon:set_size(450*KillStreak.Opt.scale ,450*KillStreak.Opt.scale)
+    self:MakeFine()
+end
 
 function KillStreakPanel:play_kill_sound()
-	blt.xaudio.setup()
 	local table_index = self.kills
 	if self.kills ==1 and not self._headshot then
 		return 
 	elseif self.kills > 8 then 
 		table_index = 8
 	end
-	local filename = self:get_sound_filename(table_index)
-	local buffer = XAudio.Buffer:new(filename)
-	
-	table.insert(self._sound_sources,XAudio.Source:new(buffer))
+	self:play_voices(table_index)
 end
 
 function KillStreakPanel:update_sound_sources()
+	-- 此函数的目的是让声音跟着玩家角色播放，不然声音会在你击杀的地点固定播放
 	for i, src in ipairs(self._sound_sources) do
 		if src then
 			if not src:is_closed() then
@@ -174,13 +174,13 @@ function KillStreakPanel:play_voices(voice_type)
 		
 		local filename = self:get_sound_filename(voice_type)
 		local buffer = XAudio.Buffer:new(filename)
-		table.insert(self._sound_sources,XAudio.Source:new(buffer))
+		table.insert(self._sound_sources,XAudio.Source:new(buffer))-- 插入到播放队列中
 	end
 end
 
 function KillStreakPanel:get_sound_filename(voice_type)
 	local filename = KillStreak.ModPath .. "assets/sounds/"
-	--filename = filename .. "women1"
+	
 	filename = filename .. KillStreak.voices[KillStreak.Opt.voice_source].src
 	filename = filename .. "/"
 	filename = filename .. self._ogg_table[voice_type]

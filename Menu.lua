@@ -64,12 +64,12 @@ end
 function MenuCallbackHandler:KillStreak_value(item)
 	KillStreak.Opt[item._parameters.name:gsub("KillStreak_", "")] = item:value()
 	KillStreak:Save()
-	KillStreak.Panel:Update()
+	KillStreak.Panel:Reset_icon()
 end
 function MenuCallbackHandler:KillStreak_toggle(item)
 	KillStreak.Opt[item._parameters.name:gsub("KillStreak_", "")] = item:value() == "on"
 	KillStreak:Save()
-	KillStreak.Panel:Update()
+	KillStreak.Panel:Reset_icon()
 end
 
 Hooks:Add("MenuManagerPopulateCustomMenus", "KillStreakOptions", function(self, nodes)

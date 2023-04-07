@@ -1,3 +1,4 @@
+
 Hooks:PostHook(PlayerManager, "on_killshot", "KillStreakHook1", function()
     KillStreak.Panel.kills = KillStreak.Panel.kills + 1
     KillStreak.Panel:SetKills()
@@ -5,6 +6,7 @@ end)
 Hooks:PostHook(PlayerManager, "on_lethal_headshot_dealt", "KillStreakHook2", function()
     KillStreak.Panel._headshot = true
 end)
+
 Hooks:PostHook(PlayerManager, "on_throw_grenade", "killsteak_play_grenade_voice", function()
     KillStreak.Panel:play_voices(11)
 end)
